@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Product Prompt Builder - Pro Edition</title>
+
+    <!-- Import Font Montserrat untuk UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+         :root {
+            --bg-color: #0E0E10;
+            --card-bg: #18181B;
+            --border-color: #27272A;
+            --text-main: #F4F4F5;
+            --text-muted: #A1A1AA;
+            --primary: #6366F1;
+            /* Indigo */
+            --accent: #10B981;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body {
+            font-family: 'Montserrat', 'Gilroy', 'Futura', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.5;
+        }
+        
+        .wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 40px;
+            text-align: left;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #ffffff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin: 0;
+        }
+        
+        .section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-main);
+        }
+        
+        .section-title span {
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.8rem;
+        }
+        
+        .input-group {
+            margin-bottom: 24px;
+        }
+        
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        label.sub-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+        
+        input[type="text"]::placeholder {
+            color: #52525B;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        /* Aspect Ratio Cards */
+        
+        .ratio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+        
+        .ratio-card {
+            position: relative;
+        }
+        
+        .ratio-card input[type="radio"] {
+            display: none;
+        }
+        
+        .ratio-label {
+            display: block;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .ratio-label:hover {
+            border-color: #52525B;
+        }
+        
+        .ratio-card input[type="radio"]:checked+.ratio-label {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+            color: white;
+        }
+        
+        .ratio-icon {
+            display: block;
+            margin: 0 auto 10px auto;
+            border: 2px solid currentColor;
+            border-radius: 4px;
+            opacity: 0.5;
+        }
+        
+        .ratio-card input[type="radio"]:checked+.ratio-label .ratio-icon {
+            opacity: 1;
+            color: var(--primary);
+        }
+        
+        .ratio-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: block;
+        }
+        
+        .ratio-size {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: block;
+        }
+        /* Dropdowns */
+        
+        .grid-dropdowns {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .dropdown-box {
+            position: relative;
+        }
+        
+        select {
+            width: 100%;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 14px;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            appearance: none;
+            transition: var(--transition);
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .dropdown-box::after {
+            content: "▼";
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            position: absolute;
+            right: 14px;
+            top: 38px;
+            pointer-events: none;
+        }
+        
+        .desc-text {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: #71717A;
+            line-height: 1.4;
+            min-height: 34px;
+        }
+        /* Result Area */
+        
+        textarea {
+            width: 100%;
+            height: 180px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--accent);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            resize: vertical;
+            box-sizing: border-box;
+            margin-bottom: 16px;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        button.copy-btn {
+            background-color: var(--text-main);
+            color: var(--bg-color);
+            border: none;
+            padding: 14px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            font-family: inherit;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        button.copy-btn:hover {
+            background-color: white;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <div class="header">
+            <h1>Prompt Generator - Studio Edition</h1>
+            <p>Visual builder untuk komposisi produk komersial bergaya profesional.</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title"><span>1</span> Produk & Copywriting</h2>
+
+            <div class="dropdown-box" style="margin-bottom: 24px;">
+                <label class="sub-label">Pilih Produk Utama</label>
+                <select id="product-input" onchange="generatePrompt()">
+                    <option value="">-- Pilih Produk --</option>
+                    <option value="premium whey gold">Premium Whey Gold</option>
+                    <option value="leanzero">Leanzero</option>
+                    <option value="isolate matrix">Isolate Matrix</option>
+                    <option value="megamass">Megamass</option>
+                    <option value="lactozero">Lactozero</option>
+                    <option value="plante">Plante</option>
+                    <option value="limit break">Limit Break</option>
+                    <option value="oxy burn">Oxy Burn</option>
+                    <option value="tribulus">Tribulus</option>
+                    <option value="milkthistle">Milkthistle</option>
+                    <option value="cazein">Cazein</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label class="sub-label">Teks pada Desain (Biarkan kosong jika hanya gambar produk)</label>
+                <input type="text" id="text-input" placeholder="Contoh: PURE STRENGTH" oninput="generatePrompt()">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title"><span>2</span> Dimensi & Layout (Aspect Ratio)</h2>
+
+            <div class="ratio-grid">
+                <div class="ratio-card">
+                    <input type="radio" name="aspect-ratio" id="ar-1-1" value="--ar 1:1" checked onchange="generatePrompt()">
+                    <label for="ar-1-1" class="ratio-label">
+                        <div class="ratio-icon" style="width: 24px; height: 24px;"></div>
+                        <span class="ratio-name">Instagram Post</span>
+                        <span class="ratio-size">1080 x 1080px</span>
+                    </label>
+                </div>
+                <div class="ratio-card">
+                    <input type="radio" name="aspect-ratio" id="ar-4-5" value="--ar 4:5" onchange="generatePrompt()">
+                    <label for="ar-4-5" class="ratio-label">
+                        <div class="ratio-icon" style="width: 24px; height: 30px;"></div>
+                        <span class="ratio-name">Instagram Feed</span>
+                        <span class="ratio-size">1080 x 1350px</span>
+                    </label>
+                </div>
+                <div class="ratio-card">
+                    <input type="radio" name="aspect-ratio" id="ar-9-16" value="--ar 9:16" onchange="generatePrompt()">
+                    <label for="ar-9-16" class="ratio-label">
+                        <div class="ratio-icon" style="width: 18px; height: 32px;"></div>
+                        <span class="ratio-name">IG Story / Reels</span>
+                        <span class="ratio-size">1080 x 1920px</span>
+                    </label>
+                </div>
+                <div class="ratio-card">
+                    <input type="radio" name="aspect-ratio" id="ar-16-9" value="--ar 16:9" onchange="generatePrompt()">
+                    <label for="ar-16-9" class="ratio-label">
+                        <div class="ratio-icon" style="width: 32px; height: 18px;"></div>
+                        <span class="ratio-name">Web Banner</span>
+                        <span class="ratio-size">1920 x 1080px</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title"><span>3</span> Art Direction & Efek Visual</h2>
+            <div class="grid-dropdowns" id="dropdown-container">
+                <!-- Dropdown di-render otomatis oleh JS -->
+            </div>
+        </div>
+
+        <div class="section" style="border-color: var(--primary);">
+            <h2 class="section-title"><span>4</span> Final Output</h2>
+            <textarea id="final-prompt" readonly placeholder="Mulai pilih produk di atas untuk menghasilkan prompt..."></textarea>
+            <button class="copy-btn" onclick="copyToClipboard()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy Prompt ke Clipboard
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Database Embedded
+        const dbData = [{
+            "id": "elemen_grafis",
+            "nama": "Elemen Grafis / Badge Teks",
+            "opsi": [{
+                "nama": "Brush Stroke / Paint Splash",
+                "prompt": "dynamic brush stroke background behind text, expressive paint splash accents",
+                "desc": "Aksen sapuan kuas tebal di belakang teks. Cocok untuk efek energetik, street-style, atau organik."
+            }, {
+                "nama": "Glassmorphism / Rounded Pill",
+                "prompt": "floating glassmorphism pill-shaped badge, frosted glass UI elements, modern rounded aesthetic",
+                "desc": "Badge efek kaca buram (frosted) membulat. Mirip elemen UI modern/Apple style."
+            }, {
+                "nama": "Minimalist Geometric Box",
+                "prompt": "minimalist thin-line rectangular framing, sharp geometric box accents",
+                "desc": "Bingkai garis kotak tipis dan tajam. Terlihat sangat premium, modern, dan rapi."
+            }, {
+                "nama": "Holographic / Iridescent Sticker",
+                "prompt": "iridescent holographic sticker element, shiny metallic decal badge",
+                "desc": "Aksen badge berbentuk stiker dengan efek pendaran warna-warni hologram."
+            }, {
+                "nama": "Vintage Ribbon / Classic Stamp",
+                "prompt": "classic vintage ribbon banner, retro ink stamp emblem",
+                "desc": "Pita klasik atau stempel retro. Ideal untuk kopi, produk artisan, atau gaya heritage."
+            }]
+        }, {
+            "id": "efek_partikel",
+            "nama": "Efek Partikel & Dinamis",
+            "opsi": [{
+                "nama": "Water Splash / Droplets",
+                "prompt": "dynamic water splash, high-speed liquid motion, fresh condensation droplets",
+                "desc": "Cipratan air berkecepatan tinggi dan embun. Sangat cocok untuk produk minuman atau skincare segar."
+            }, {
+                "nama": "Power Dust / Powder Explosion",
+                "prompt": "explosive power dust, fine particle cloud, dynamic chalk explosion",
+                "desc": "Ledakan bubuk/partikel dramatis. Cocok untuk suplemen, gym, atau produk berenergi tinggi."
+            }, {
+                "nama": "Cinematic Smoke / Mist",
+                "prompt": "swirling cinematic smoke, atmospheric mist, mysterious fog rolling",
+                "desc": "Efek asap atau kabut sinematik. Memberikan kesan misterius, premium, atau aroma kuat (parfum/kopi)."
+            }, {
+                "nama": "Glowing Sparks / Embers",
+                "prompt": "glowing fiery sparks, flying embers, high energy heat effect",
+                "desc": "Percikan api kecil yang melayang. Bagus untuk produk otomotif, grill, atau promo 'Hot Sale'."
+            }, {
+                "nama": "Floating Leaves / Botanical",
+                "prompt": "floating green leaves, falling botanical elements, gentle organic motion",
+                "desc": "Daun atau elemen organik yang melayang. Ideal untuk produk natural, organik, atau vegan."
+            }]
+        }, {
+            "id": "tipografi",
+            "nama": "Gaya Tipografi & Font",
+            "opsi": [{
+                "nama": "Clean & Modern (Gilroy/Montserrat)",
+                "prompt": "modern clean typography, using fonts like Gilroy or Montserrat or Futura, perfect kerning",
+                "desc": "Layout teks elegan, modern, dan sangat rapi. Cocok untuk produk komersial premium."
+            }, {
+                "nama": "Bold & Energetic (Brave Strong/Ash)",
+                "prompt": "bold energetic typography, using fonts like Brave Strong or Ash, heavy impact text",
+                "desc": "Teks tebal dan agresif. Sangat cocok untuk produk fitness, sport, atau diskon."
+            }, {
+                "nama": "Playful & Expressive (Hey August/Urzeit)",
+                "prompt": "expressive stylistic typography, using fonts like Hey August or Urzeit, creative layout",
+                "desc": "Teks dengan gaya kasual, unik, dan eksperimental (aesthetic kreatif)."
+            }]
+        }, {
+            "id": "material",
+            "nama": "Material & Tekstur Produk",
+            "opsi": [{
+                "nama": "Premium Matte / Doff",
+                "prompt": "premium matte finish, soft-touch texture, non-reflective sleek surface",
+                "desc": "Permukaan produk doff, tidak memantulkan cahaya berlebih, kesan sangat mewah."
+            }, {
+                "nama": "High-Gloss / Shiny",
+                "prompt": "high-gloss finish, highly reflective surface, shiny liquid-like clear coat",
+                "desc": "Permukaan mengkilap, basah, dan reflektif. Cocok untuk botol kaca atau plastik PET."
+            }, {
+                "nama": "Metallic / Foil / Chrome",
+                "prompt": "metallic texture, polished chrome details, brushed aluminum reflection",
+                "desc": "Material besi, aluminium, atau aksen cetak foil emas/perak yang memantulkan cahaya solid."
+            }, {
+                "nama": "Frosted Glass",
+                "prompt": "frosted glass material, semi-translucent, elegant subsurface scattering",
+                "desc": "Kaca buram/es. Sangat cocok untuk parfum, skincare, atau minuman dingin."
+            }]
+        }, {
+            "id": "background_env",
+            "nama": "Background & Set Lingkungan",
+            "opsi": [{
+                "nama": "Clean Studio Cyclorama",
+                "prompt": "clean infinite cyclorama studio background, seamless seamless backdrop, no clutter",
+                "desc": "Latar belakang studio melengkung tanpa sudut (seamless). Sangat bersih untuk fokus ke produk."
+            }, {
+                "nama": "Abstract 3D Podium",
+                "prompt": "resting on abstract 3D geometric podiums, elegant product display pedestal",
+                "desc": "Produk diletakkan di atas podium 3D geometris (silinder/kotak) yang estetik."
+            }, {
+                "nama": "Floating / Anti-Gravity",
+                "prompt": "floating in mid-air, anti-gravity levitation effect, dynamic suspension",
+                "desc": "Produk dan elemen di sekitarnya melayang di udara. Dinamis dan futuristik."
+            }, {
+                "nama": "Dynamic Liquid Splash",
+                "prompt": "dynamic liquid splashes surrounding the product, high-speed fluid motion photography",
+                "desc": "Cipratan air/cairan mengelilingi produk. Bagus untuk minuman, kosmetik, atau efek segar."
+            }]
+        }, {
+            "id": "kamera",
+            "nama": "Sudut Kamera (Angle)",
+            "opsi": [{
+                "nama": "Low Angle (The Hero Shot)",
+                "prompt": "low angle shot, looking up from below, hero shot, imposing perspective",
+                "desc": "Kamera dari bawah mendongak. Memberikan kesan superior, kuat, dan masif."
+            }, {
+                "nama": "Extreme Close-Up / Macro",
+                "prompt": "extreme close-up, macro photography, ultra detailed, intimate framing",
+                "desc": "Fokus super dekat pada detail mikro/tekstur."
+            }, {
+                "nama": "Bird’s Eye View (Flat Lay)",
+                "prompt": "bird's eye view, overhead shot, top-down perspective, perfectly flat lay",
+                "desc": "Kamera lurus dari atas. Kesan rapi, geometris, flat-lay premium."
+            }, {
+                "nama": "Eye-Level / Neutral",
+                "prompt": "eye-level shot, neutral perspective, natural framing",
+                "desc": "Sejajar dengan mata. Membangun kejujuran dan koneksi langsung."
+            }]
+        }, {
+            "id": "komposisi",
+            "nama": "Komposisi",
+            "opsi": [{
+                "nama": "Dead Center / Symmetrical",
+                "prompt": "dead center composition, perfectly symmetrical, absolute focus",
+                "desc": "Tepat di tengah. Agung, formal, dan fokus mutlak."
+            }, {
+                "nama": "Negative Space (Minimalis)",
+                "prompt": "vast negative space, minimalist composition, elegant framing",
+                "desc": "Menyisakan ruang kosong yang luas. Elegan dan mahal."
+            }, {
+                "nama": "Foreground Framing",
+                "prompt": "out-of-focus foreground elements, cinematic depth of field",
+                "desc": "Objek buram di depan kamera untuk kedalaman sinematik (Depth of Field)."
+            }]
+        }, {
+            "id": "style",
+            "nama": "Tema Visual",
+            "opsi": [{
+                "nama": "Dark Elegant Professional",
+                "prompt": "dark elegant professional, premium matte black aesthetic",
+                "desc": "Fokus pada tekstur premium, mewah tapi tangguh."
+            }, {
+                "nama": "Gritty Industrial",
+                "prompt": "gritty industrial aesthetic, raw hardcore vibe, concrete background",
+                "desc": "Terasa kasar, tembok semen, vibe kerja keras."
+            }, {
+                "nama": "Modern Minimalist",
+                "prompt": "modern minimalist aesthetic, clean white space, pristine look",
+                "desc": "Ruang bersih, tertata, untuk kesan murni/steril."
+            }, {
+                "nama": "Cyberpunk / Neon Noir",
+                "prompt": "cyberpunk aesthetic, neon noir, high-tech urban environment",
+                "desc": "Cahaya neon dan elemen futuristik teknologi tinggi."
+            }]
+        }, {
+            "id": "warna",
+            "nama": "Color Grading",
+            "opsi": [{
+                "nama": "Monochromatic Minimal",
+                "prompt": "monochromatic color palette, strictly limited colors, unified hue",
+                "desc": "Skema warna satu nada. Menonjolkan bentuk dan tekstur dibanding warna-warni."
+            }, {
+                "nama": "Vibrant & Punchy",
+                "prompt": "vibrant punchy colors, highly saturated, eye-catching bold hues",
+                "desc": "Warna-warni terang dan mencolok. Bagus untuk promosi ritel/diskon."
+            }, {
+                "nama": "Soft Pastel & Airy",
+                "prompt": "soft pastel color grading, gentle airy tones, light and soft ambiance",
+                "desc": "Warna-warna pastel yang lembut. Ideal untuk produk kecantikan atau bayi."
+            }, {
+                "nama": "Earthy & Organic",
+                "prompt": "earthy organic tones, warm muted natural color palette",
+                "desc": "Warna alam (coklat, hijau lumut, terracotta). Bagus untuk produk eco-friendly/kopi."
+            }]
+        }, {
+            "id": "lighting",
+            "nama": "Pencahayaan",
+            "opsi": [{
+                "nama": "Rim Lighting / Edge",
+                "prompt": "rim lighting, sharp edge lighting, distinct silhouette separation",
+                "desc": "Garis cahaya di tepian objek memisahkan dari background gelap."
+            }, {
+                "nama": "Chiaroscuro / High Contrast",
+                "prompt": "chiaroscuro lighting, extreme high contrast, dramatic shadows",
+                "desc": "Kontras ekstrem terang-gelap. Dramatis & maskulin."
+            }, {
+                "nama": "Volumetric / God Rays",
+                "prompt": "volumetric lighting, god rays, light piercing through air",
+                "desc": "Berkas cahaya menembus udara, menambah dimensi."
+            }, {
+                "nama": "Softbox Studio",
+                "prompt": "even softbox lighting, perfectly diffused light, clear label visibility",
+                "desc": "Cahaya lembut merata untuk memperlihatkan detail produk bersih tanpa bayangan keras."
+            }]
+        }];
+
+        function initApp() {
+            renderDropdowns();
+            generatePrompt();
+        }
+
+        function renderDropdowns() {
+            const container = document.getElementById('dropdown-container');
+
+            dbData.forEach(kategori => {
+                let html = `
+                    <div class="dropdown-box">
+                        <label class="sub-label">${kategori.nama}</label>
+                        <select id="sel-${kategori.id}" onchange="updateDesc(this, '${kategori.id}'); generatePrompt();">
+                            <option value="" data-desc="Tidak menggunakan efek ini (Auto).">-- Pilih (Opsional) --</option>
+                `;
+
+                kategori.opsi.forEach(opt => {
+                    html += `<option value="${opt.prompt}" data-desc="${opt.desc}">${opt.nama}</option>`;
+                });
+
+                html += `
+                        </select>
+                        <span class="desc-text" id="desc-${kategori.id}">Tidak menggunakan efek ini (Auto).</span>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function updateDesc(selectElement, id) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const desc = selectedOption.getAttribute('data-desc');
+            document.getElementById(`desc-${id}`).innerText = desc;
+        }
+
+        function generatePrompt() {
+            const product = document.getElementById('product-input').value.trim();
+            const textBrief = document.getElementById('text-input').value.trim();
+            const ar = document.querySelector('input[name="aspect-ratio"]:checked').value;
+            const textArea = document.getElementById('final-prompt');
+
+            let promptParts = [];
+
+            // 1. Core Subject
+            if (product !== "") {
+                promptParts.push(`Commercial professional product photography of ${product}`);
+            } else {
+                promptParts.push(`Commercial professional product photography of [MASUKAN PRODUK ANDA]`);
+            }
+
+            // 2. Add visual effects, styles, materials, and shapes from dropdowns dynamically
+            dbData.forEach(kategori => {
+                const selectElement = document.getElementById(`sel-${kategori.id}`);
+                if (selectElement && selectElement.value !== "") {
+                    promptParts.push(selectElement.value);
+                }
+            });
+
+            // 3. Inject the specific text if provided
+            if (textBrief !== "") {
+                promptParts.push(`featuring perfectly legible typography text reading "${textBrief}"`);
+            }
+
+            // 4. STRICT Constraints (DI-UPDATE: Untuk hasil konsisten, bersih, dan berjarak lega layaknya desainer pro)
+            const strictConstraints = "masterpiece commercial graphic design, top-tier professional layout, immaculate typography consistency, coherent font pairing, intelligent use of negative space, perfect breathing room between text and objects, strict grid alignment, context-aware badge placement without overlapping, clutter-free composition, strictly maintain product structural integrity, highly polished visual hierarchy, crisp and clean aesthetic, no messy text, flawless commercial layout";
+            promptParts.push(strictConstraints);
+
+            // 5. Render Quality & Aspect Ratio
+            promptParts.push(`8k resolution, highly detailed, photorealistic, --style raw --v 6.0 ${ar}`);
+
+            textArea.value = promptParts.join(", ");
+        }
+
+        function copyToClipboard() {
+            const textArea = document.getElementById('final-prompt');
+            const productVal = document.getElementById('product-input').value.trim();
+
+            if (productVal === "") {
+                alert("Silakan pilih produk terlebih dahulu!");
+                document.getElementById('product-input').focus();
+                return;
+            }
+
+            textArea.select();
+            document.execCommand("copy");
+
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "✅ Berhasil Disalin!";
+            btn.style.backgroundColor = "var(--accent)";
+            btn.style.color = "#000";
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.backgroundColor = "var(--text-main)";
+                btn.style.color = "var(--bg-color)";
+            }, 2000);
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+
+</html>
